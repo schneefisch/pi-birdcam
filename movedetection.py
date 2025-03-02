@@ -3,6 +3,7 @@
 # Bildveränderungserkennung mit PIL und PiCamera2
 
 from picamera2 import Picamera2
+from picamera2.transforms import Transform
 import time
 from pathlib import Path
 import requests
@@ -37,7 +38,7 @@ class MeisenCam:
         """Konfiguriert die Kamera mit den gewünschten Einstellungen"""
         config = self.camera.create_still_configuration(
             main={"size": (self.WIDTH, self.HEIGHT)},
-            transform=libcamera.Transform(hflip=False, vflip=False)
+            transform=Transform(hflip=False, vflip=False)
         )
         self.camera.configure(config)
         
