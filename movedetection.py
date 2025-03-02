@@ -9,6 +9,7 @@ import requests
 from PIL import Image
 import logging
 from datetime import datetime
+import shutil
 
 class MeisenCam:
     BASE_URL = "https://pro.woelkli.com/s/Gi2bRAHrgMoebcA"
@@ -66,8 +67,8 @@ class MeisenCam:
             bildalt = Image.open(self.old_image_path).convert("L")
         except FileNotFoundError:
             # Falls kein altes Bild existiert
-            logging.info("No old image found, rename current image")
-            self.current_image_path.rename(self.old_image_path)
+            logging.info("No old image found, copying current image as old image")
+            shutil.copy2(str(self.current_image_path), str(self.old_image_path))
             return 0
             
         # Bilder verkleinern für Vergleich
@@ -84,23 +85,26 @@ class MeisenCam:
                 
         kennzahl = differenz / (size[0] * size[1])
         
-        logging.info(f"Kennzahl for movement detection: {kennzahl}")
-        
-        # Aktuelles Bild als altes Bild speichern
-        self.current_image_path.rename(self.old_image_path)
+        # Altes Bild durch aktuelles Bild ersetzen (kopieren statt umbenennen)
+        shutil.copy2(str(self.current_image_path), str(self.old_image_path))
         
         return kennzahl
         
     def upload_image(self, mode):
         """Lädt das Bild zum Webserver hoch"""
+        logging.info(f"trying to upload image: {self.current_image_path}")
         base_url = self.BASE_URL  # Defined as class constant
         url = f"{base_url}?mode=1" if mode else base_url
         
-        with open(self.current_image_path, 'rb') as img:
-            files = {'file': img}
-            response = requests.post(url, files=files)
-            
-        return response
+        try:
+            with open(self.current_image_path, 'rb') as img:
+                files = {'file': img}
+                response = requests.post(url, files=files)
+                logging.info(f"Upload response: {response.status_code}")
+                return response
+        except FileNotFoundError:
+            logging.error(f"Konnte Datei {self.current_image_path} nicht zum Upload finden")
+            return None
         
     def log_activity(self, zeitstempel, kennzahl, mode, response):
         """Protokolliert die Aktivität"""
