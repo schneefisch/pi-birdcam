@@ -47,3 +47,29 @@ sudo apt install -y python3-picamera2 python3-libcamera
 ```
 
 download the picture and check if it's working
+
+## Upload
+instead of a custom server I'm using a drop-file directory in Nextcloud.
+Just use an own or hosted instance of a nextcloud and make the directory available.
+
+## Run automatically
+
+to run that automatically and repeatedly edit the crontabs
+
+`crontab -e`
+
+```sh
+# Alle 15 Sekunden ein Bild aufnehmen und hochladen
+* * * * * sleep 0; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
+* * * * * sleep 15; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
+* * * * * sleep 30; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
+* * * * * sleep 45; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
+```
+
+and since the raspberry pi sometimes needs a restart, add this:
+
+`sudo crontab -e`
+
+```sh
+0 0 * * * /sbin/shutdown -r
+```
