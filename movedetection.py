@@ -91,16 +91,18 @@ class MeisenCam:
         return kennzahl
         
     def upload_image(self, mode):
-        """Lädt das Bild zum Webserver hoch"""
-        logging.info(f"trying to upload image: {self.current_image_path}")
-        base_url = self.BASE_URL  # Defined as class constant
-        url = f"{base_url}?mode=1" if mode else base_url
+        """example valid curl: curl -v -k -T meisencam.jpg -u 'Gi2bRAHrgMoebcA:' https://pro.woelkli.com/public.php/webdav/001.jpg"""
+        """Lädt das Bild zum Nextcloud WebDAV hoch"""
+        zeitstempel = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        zieldatei = f"{zeitstempel}.jpg"
+        url = f"https://pro.woelkli.com/public.php/webdav/{zieldatei}"
+        auth = ('Gi2bRAHrgMoebcA', '')  # Username und leeres Passwort
         
+        logging.info(f"Versuche Bild hochzuladen: {self.current_image_path} nach: {url}")
         try:
             with open(self.current_image_path, 'rb') as img:
-                files = {'file': img}
-                response = requests.post(url, files=files)
-                logging.info(f"Upload response: {response.status_code}")
+                response = requests.put(url, data=img, auth=auth, verify=False)
+                logging.info(f"Upload Antwort: {response.status_code}")
                 return response
         except FileNotFoundError:
             logging.error(f"Konnte Datei {self.current_image_path} nicht zum Upload finden")
