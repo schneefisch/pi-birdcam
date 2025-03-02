@@ -66,10 +66,12 @@ class MeisenCam:
             bildalt = Image.open(self.old_image_path).convert("L")
         except FileNotFoundError:
             # Falls kein altes Bild existiert
+            logging.info("No old image found, rename current image")
             self.current_image_path.rename(self.old_image_path)
             return 0
             
         # Bilder verkleinern für Vergleich
+        logging.info("resizing images for movement detection")
         size = (4, 3)
         bildneu = bildneu.resize(size)
         bildalt = bildalt.resize(size)
@@ -81,6 +83,8 @@ class MeisenCam:
                 differenz += abs(bildneu.getpixel((x,y)) - bildalt.getpixel((x,y)))
                 
         kennzahl = differenz / (size[0] * size[1])
+        
+        logging.info(f"Kennzahl for movement detection: {kennzahl}")
         
         # Aktuelles Bild als altes Bild speichern
         self.current_image_path.rename(self.old_image_path)
