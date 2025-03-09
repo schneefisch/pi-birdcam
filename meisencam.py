@@ -61,7 +61,16 @@ class MeisenCam:
         return zeitstempel
         
     def calculate_movement(self):
-        """Berechnet die Bewegungskennzahl zwischen zwei Bildern"""
+        """Berechnet die Bewegungskennzahl zwischen zwei aufeinanderfolgenden Bildern.
+        Die Kennzahl repräsentiert den durchschnittlichen Unterschied der Pixelwerte zwischen den Bildern.
+        Ein höherer Wert deutet auf mehr Bewegung hin.
+        
+        Wenn die Kennzahl > SCHWELLWERT (35) ist, wird das Bild als Bewegung erkannt (mode=1).
+        Wenn die Kennzahl <= SCHWELLWERT ist, wird keine Bewegung erkannt (mode=0).
+        
+        Returns:
+            float: Bewegungskennzahl zwischen 0 (keine Änderung) und 255 (maximale Änderung)
+        """
         try:
             bildneu = Image.open(self.current_image_path).convert("L")
             bildalt = Image.open(self.old_image_path).convert("L")
@@ -89,12 +98,11 @@ class MeisenCam:
         shutil.copy2(str(self.current_image_path), str(self.old_image_path))
         
         return kennzahl
-        
     def upload_image(self, mode):
-        """example valid curl: curl -v -k -T meisencam.jpg -u 'Gi2bRAHrgMoebcA:' https://pro.woelkli.com/public.php/webdav/001.jpg"""
+        """example valid curl: curl -v -k -T meisencam.jpg -u 'folderid:' https://pro.woelkli.com/public.php/webdav/001.jpg"""
         """Lädt das Bild zum Nextcloud WebDAV hoch"""
         zeitstempel = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        zieldatei = f"{zeitstempel}.jpg"
+        zieldatei = f"{zeitstempel}-m{mode}.jpg"
         url = f"https://pro.woelkli.com/public.php/webdav/{zieldatei}"
         auth = ('Gi2bRAHrgMoebcA', '')  # Username und leeres Passwort
         
@@ -116,8 +124,9 @@ class MeisenCam:
             
     def run(self):
         """Hauptprozess"""
-        logging.info("executing run()")
+        logging.info("executing capture_image()")
         zeitstempel = self.capture_image()
+        logging.info("executing calculate_movement()")
         kennzahl = self.calculate_movement()
         mode = 1 if kennzahl > self.SCHWELLWERT else 0
         
@@ -125,6 +134,7 @@ class MeisenCam:
         logging.info(f"Kennzahl: {kennzahl}")
         logging.info(f"Modus: {mode}")
         
+        logging.info("executing upload_image()")
         response = self.upload_image(mode)
         self.log_activity(zeitstempel, kennzahl, mode, response)
 
