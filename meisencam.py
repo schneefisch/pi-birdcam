@@ -65,13 +65,13 @@ class MeisenCam:
             
             # Weißabgleich manuell einstellen, da Auto mit IR nicht gut funktioniert
             "AwbEnable": False,
-            "ColourGains": (1.0, 1.5),  # Rot- und Blau-Verstärkung
+            "ColourGains": (0.8, 1.8),  # Rot reduziert und Blau-Verstärkung
             
             # Bildparameter anpassen
-            "Brightness": 0.3,
-            "Contrast": 1.2,
-            "Saturation": 0.7,  # Reduzierte Sättigung kann Farbstiche vermindern
-            "Sharpness": 1.0
+            "Brightness": 0.3, # deutlich reduziert
+            "Contrast": 1.3, # Leicht erhöhen
+            "Saturation": 0.5,  # Reduzierte Sättigung kann Farbstiche vermindern
+            "Sharpness": 1.2 # Leicht erhöhen
         })
         logging.info("Kameraeinstellungen für bessere Bildqualität angepasst")
         
