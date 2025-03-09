@@ -29,6 +29,13 @@ class MeisenCam:
             level=logging.INFO,
             format='%(asctime)s - %(message)s'
         )
+
+        # Initialisierungskonfigurationen loggen
+        logging.info("Initialisiere MeisenCam mit folgenden Einstellungen:")
+        logging.info(f"Bildbreite: {self.WIDTH}px")
+        logging.info(f"Bildhöhe: {self.HEIGHT}px") 
+        logging.info(f"Bewegungsschwellwert: {self.SCHWELLWERT}")
+        logging.info(f"RAM-Disk Pfad: {self.RAMDISK_PATH}")
         
         # Kamera initialisieren
         self.camera = Picamera2()
