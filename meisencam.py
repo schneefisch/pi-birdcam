@@ -53,15 +53,25 @@ class MeisenCam:
         self.camera.configure(config)
         # Automatische Belichtungssteuerung aktivieren
         self.camera.set_controls({
-            "AeEnable": True,  # Automatische Belichtung aktivieren
-            "AeMeteringMode": 1,  # Spot-Messung statt Durchschnitt
-            "AeConstraintMode": 0,  # Normal
-            "AeExposureMode": 0,  # Normal
-            "AwbMode": 0,  # Auto statt Cloudy für bessere Farbanpassung
-            "Brightness": 0.5,  # Neutralere Helligkeit
-            "Contrast": 1.2,  # Kontrast erhöhen
-            "Saturation": 1.3,  # Sättigung erhöhen für lebendigere Farben
-            "Sharpness": 1.2  # Schärfe erhöhen
+            # Automatische Belichtung deaktivieren für mehr Kontrolle
+            "AeEnable": False,
+            
+            # Manuelle Belichtungszeit (anpassen je nach Lichtverhältnissen)
+            # Längere Zeiten für IR-Aufnahmen bei schlechtem Licht
+            "ExposureTime": 50000,  # in Mikrosekunden (50000 = 1/20s)
+            
+            # ISO-Äquivalent erhöhen
+            "AnalogueGain": 8.0,  # Höherer Wert für IR
+            
+            # Weißabgleich manuell einstellen, da Auto mit IR nicht gut funktioniert
+            "AwbEnable": False,
+            "ColourGains": (1.5, 1.5),  # Rot- und Blau-Verstärkung
+            
+            # Bildparameter anpassen
+            "Brightness": 0.5,
+            "Contrast": 1.3,
+            "Saturation": 0.7,  # Reduzierte Sättigung kann Farbstiche vermindern
+            "Sharpness": 1.0
         })
         logging.info("Kameraeinstellungen für bessere Bildqualität angepasst")
         
