@@ -18,7 +18,7 @@ class MeisenCam:
         # Voreinstellungen
         self.WIDTH = 320
         self.HEIGHT = 240
-        self.SCHWELLWERT = 35
+        self.SCHWELLWERT = 1.0
         self.RAMDISK_PATH = Path('/mnt/ramdisk')
         self.current_image_path = self.RAMDISK_PATH / 'meisencam.jpg'
         self.old_image_path = self.RAMDISK_PATH / 'meisencamalt.jpg'
@@ -109,9 +109,14 @@ class MeisenCam:
         shutil.copy2(str(self.current_image_path), str(self.old_image_path))
         
         return kennzahl
+    
     def upload_image(self, mode):
         """example valid curl: curl -v -k -T meisencam.jpg -u 'folderid:' https://pro.woelkli.com/public.php/webdav/001.jpg"""
-        """Lädt das Bild zum Nextcloud WebDAV hoch"""
+        """Lädt das Bild zum Nextcloud WebDAV hoch wenn Bewegung erkannt wurde (mode=1)"""
+        if mode != 1:
+            logging.info(f"Keine Bewegung erkannt (mode={mode}), überspringe Upload")
+            return None
+            
         zeitstempel = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         zieldatei = f"{zeitstempel}-m{mode}.jpg"
         url = f"https://pro.woelkli.com/public.php/webdav/{zieldatei}"
