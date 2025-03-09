@@ -21,7 +21,7 @@ class MeisenCam:
 
         # 1.0 ist default
         # kann erhöht werden für geringere Empfindlichkeit
-        self.SCHWELLWERT = 1.0
+        self.SCHWELLWERT = 3.0
         self.RAMDISK_PATH = Path('/mnt/ramdisk')
         self.current_image_path = self.RAMDISK_PATH / 'meisencam.jpg'
         self.old_image_path = self.RAMDISK_PATH / 'meisencamalt.jpg'
