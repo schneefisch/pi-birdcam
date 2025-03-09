@@ -116,6 +116,7 @@ class MeisenCam:
             
     def run(self):
         """Hauptprozess"""
+        logging.info("executing run()")
         zeitstempel = self.capture_image()
         kennzahl = self.calculate_movement()
         mode = 1 if kennzahl > self.SCHWELLWERT else 0
