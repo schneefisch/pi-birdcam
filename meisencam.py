@@ -128,9 +128,9 @@ class MeisenCam:
     def upload_image(self, mode):
         """example valid curl: curl -v -k -T meisencam.jpg -u 'folderid:' https://pro.woelkli.com/public.php/webdav/001.jpg"""
         """Lädt das Bild zum Nextcloud WebDAV hoch wenn Bewegung erkannt wurde (mode=1)"""
-        # if mode != 1:
-        #     logging.info(f"Keine Bewegung erkannt (mode={mode}), überspringe Upload")
-        #     return None
+        if mode != 1:
+            logging.info(f"Keine Bewegung erkannt (mode={mode}), überspringe Upload")
+            return None
             
         zeitstempel = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         zieldatei = f"{zeitstempel}-m{mode}.jpg"
