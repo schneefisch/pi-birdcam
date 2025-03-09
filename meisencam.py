@@ -61,15 +61,15 @@ class MeisenCam:
             "ExposureTime": 50000,  # in Mikrosekunden (50000 = 1/20s)
             
             # ISO-Äquivalent erhöhen
-            "AnalogueGain": 8.0,  # Höherer Wert für IR
+            "AnalogueGain": 1.0,  # Höherer Wert für IR
             
             # Weißabgleich manuell einstellen, da Auto mit IR nicht gut funktioniert
             "AwbEnable": False,
-            "ColourGains": (1.5, 1.5),  # Rot- und Blau-Verstärkung
+            "ColourGains": (1.0, 1.5),  # Rot- und Blau-Verstärkung
             
             # Bildparameter anpassen
-            "Brightness": 0.5,
-            "Contrast": 1.3,
+            "Brightness": 0.3,
+            "Contrast": 1.2,
             "Saturation": 0.7,  # Reduzierte Sättigung kann Farbstiche vermindern
             "Sharpness": 1.0
         })
