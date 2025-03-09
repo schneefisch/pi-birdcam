@@ -54,13 +54,16 @@ class MeisenCam:
         # Automatische Belichtungssteuerung aktivieren
         self.camera.set_controls({
             "AeEnable": True,  # Automatische Belichtung aktivieren
-            "AeMeteringMode": 0,  # Durchschnittliche Belichtungsmessung
+            "AeMeteringMode": 1,  # Spot-Messung statt Durchschnitt
             "AeConstraintMode": 0,  # Normal
             "AeExposureMode": 0,  # Normal
-            "AwbMode": 2,  # Cloudy
-            "Brightness": 0.6  # 60%
+            "AwbMode": 0,  # Auto statt Cloudy für bessere Farbanpassung
+            "Brightness": 0.5,  # Neutralere Helligkeit
+            "Contrast": 1.2,  # Kontrast erhöhen
+            "Saturation": 1.3,  # Sättigung erhöhen für lebendigere Farben
+            "Sharpness": 1.2  # Schärfe erhöhen
         })
-        logging.info("Automatische Belichtungssteuerung aktiviert")
+        logging.info("Kameraeinstellungen für bessere Bildqualität angepasst")
         
     def capture_image(self):
         """Nimmt ein Bild auf und speichert es"""
