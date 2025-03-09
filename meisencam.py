@@ -18,6 +18,9 @@ class MeisenCam:
         # Voreinstellungen
         self.WIDTH = 640
         self.HEIGHT = 480
+
+        # 1.0 ist default
+        # kann erhöht werden für geringere Empfindlichkeit
         self.SCHWELLWERT = 1.0
         self.RAMDISK_PATH = Path('/mnt/ramdisk')
         self.current_image_path = self.RAMDISK_PATH / 'meisencam.jpg'
@@ -59,8 +62,10 @@ class MeisenCam:
             # Manuelle Belichtungszeit (anpassen je nach Lichtverhältnissen)
             # Längere Zeiten für IR-Aufnahmen bei schlechtem Licht
             "ExposureTime": 50000,  # in Mikrosekunden (50000 = 1/20s)
+            # ggf. exposure-time erhöhen auf 100000-200000 (1/10s - 1/5s).
             
             # ISO-Äquivalent erhöhen
+            # In dunkleren situationen kann der Wert erhoht werden.
             "AnalogueGain": 1.0,  # Höherer Wert für IR
             
             # Weißabgleich manuell einstellen, da Auto mit IR nicht gut funktioniert
@@ -69,9 +74,9 @@ class MeisenCam:
             
             # Bildparameter anpassen
             "Brightness": 0.3, # deutlich reduziert
-            "Contrast": 1.3, # Leicht erhöhen
-            "Saturation": 0.4,  # Reduzierte Sättigung kann Farbstiche vermindern
-            "Sharpness": 1.2 # Leicht erhöhen
+            "Contrast": 1.4, # Leicht erhöhen
+            "Saturation": 0.2,  # Reduzierte Sättigung kann Farbstiche vermindern
+            "Sharpness": 1.3 # Leicht erhöhen
         })
         logging.info("Kameraeinstellungen für bessere Bildqualität angepasst")
         
