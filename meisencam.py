@@ -39,7 +39,11 @@ class MeisenCam:
         
         # Kamera initialisieren
         self.camera = Picamera2()
+        # Kurz warten bis Kamera bereit ist
+        time.sleep(1)
+        logging.info("camera created, now set configurations")
         self.configure_camera()
+        logging.info("camera configured successfully")
         
     def configure_camera(self):
         """Konfiguriert die Kamera mit den gewünschten Einstellungen"""
