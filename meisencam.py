@@ -16,8 +16,8 @@ class MeisenCam:
 
     def __init__(self):
         # Voreinstellungen
-        self.WIDTH = 320
-        self.HEIGHT = 240
+        self.WIDTH = 640
+        self.HEIGHT = 480
         self.SCHWELLWERT = 1.0
         self.RAMDISK_PATH = Path('/mnt/ramdisk')
         self.current_image_path = self.RAMDISK_PATH / 'meisencam.jpg'
