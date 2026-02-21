@@ -48,11 +48,7 @@ class MeisenCamera:
         self._camera.configure(config)
         self._camera.set_controls(
             {
-                "AeEnable": False,
-                "ExposureTime": self.exposure_time,
-                "AnalogueGain": self.analogue_gain,
-                "AwbEnable": False,
-                "ColourGains": (0.8, 1.6),
+                "AeEnable": True,
                 "Brightness": self.brightness,
                 "Contrast": self.contrast,
                 "Saturation": self.saturation,
