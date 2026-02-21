@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Raspberry Pi bird camera with motion detection and Nextcloud upload"
 requires-python = ">=3.11"
 dependencies = [
-    "picamera2; sys_platform == 'linux'",
     "requests",
     "Pillow",
 ]
@@ -23,19 +22,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/meisencam"]
-
-[tool.uv]
-# picamera2 depends on python-prctl which can only be built on Linux.
-# pyqt5 (transitive dep of picamera2) has no aarch64 wheels.
-# Split environments so uv resolves per-platform and skips incompatible packages.
-environments = [
-    "sys_platform == 'linux' and platform_machine == 'x86_64'",
-    "sys_platform == 'linux' and platform_machine == 'aarch64'",
-    "sys_platform != 'linux'",
-]
-no-build-package = ["python-prctl"]
-# pyqt5 has no aarch64 wheels; exclude it — not needed for headless Pi usage
-exclude-dependencies = ["pyqt5", "pyqt5-qt5", "pyqt5-sip"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

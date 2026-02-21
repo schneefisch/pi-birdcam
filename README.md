@@ -34,8 +34,11 @@ tmpfs /mnt/ramdisk tmpfs nodev,nosuid,size=64M 0 0
 4. Install dependencies
 
 ```sh
-# install picamera2 system package
+# install picamera2 system package (cannot be installed via pip on aarch64)
 sudo apt install -y python3-picamera2 python3-libcamera
+
+# create venv with access to system site-packages (required for picamera2)
+uv venv --system-site-packages
 
 # install project dependencies
 uv sync
