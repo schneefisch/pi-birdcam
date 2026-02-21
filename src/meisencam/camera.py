@@ -1,0 +1,73 @@
+"""Camera control module wrapping Picamera2."""
+
+import logging
+import time
+from datetime import datetime
+from pathlib import Path
+
+from picamera2 import Picamera2
+
+logger = logging.getLogger(__name__)
+
+
+class MeisenCamera:
+    """Wrapper around Picamera2 for still image capture."""
+
+    def __init__(
+        self,
+        width: int = 640,
+        height: int = 480,
+        exposure_time: int = 50000,
+        analogue_gain: float = 1.0,
+        brightness: float = 0.3,
+        contrast: float = 1.4,
+        saturation: float = 0.2,
+        sharpness: float = 1.3,
+    ):
+        self.width = width
+        self.height = height
+        self.exposure_time = exposure_time
+        self.analogue_gain = analogue_gain
+        self.brightness = brightness
+        self.contrast = contrast
+        self.saturation = saturation
+        self.sharpness = sharpness
+
+        self._camera = Picamera2()
+        time.sleep(1)
+        self._configure()
+        logger.info("Camera configured (%dx%d)", self.width, self.height)
+
+    def _configure(self) -> None:
+        config = self._camera.create_still_configuration(
+            main={"size": (self.width, self.height)}
+        )
+        self._camera.configure(config)
+        self._camera.set_controls(
+            {
+                "AeEnable": False,
+                "ExposureTime": self.exposure_time,
+                "AnalogueGain": self.analogue_gain,
+                "AwbEnable": False,
+                "ColourGains": (0.8, 1.6),
+                "Brightness": self.brightness,
+                "Contrast": self.contrast,
+                "Saturation": self.saturation,
+                "Sharpness": self.sharpness,
+            }
+        )
+
+    def capture(self, output_path: Path) -> str:
+        """Capture a still image.
+
+        Returns the timestamp string for the capture.
+        """
+        self._camera.start()
+        time.sleep(2)  # sensor stabilisation
+
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        self._camera.capture_file(str(output_path))
+
+        self._camera.stop()
+        logger.info("Captured image: %s", output_path)
+        return timestamp
