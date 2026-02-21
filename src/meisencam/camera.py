@@ -20,8 +20,8 @@ class MeisenCamera:
         self,
         width: int = 640,
         height: int = 480,
-        exposure_time: int = 50000,
-        analogue_gain: float = 1.0,
+        exposure_time: int = 200000,
+        analogue_gain: float = 8.0,
         brightness: float = 0.3,
         contrast: float = 1.4,
         saturation: float = 0.2,
@@ -48,7 +48,11 @@ class MeisenCamera:
         self._camera.configure(config)
         self._camera.set_controls(
             {
-                "AeEnable": True,
+                "AeEnable": False,
+                "ExposureTime": self.exposure_time,
+                "AnalogueGain": self.analogue_gain,
+                "AwbEnable": False,
+                "ColourGains": (0.8, 1.6),
                 "Brightness": self.brightness,
                 "Contrast": self.contrast,
                 "Saturation": self.saturation,
