@@ -4,7 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Raspberry Pi bird camera (`meisencam`) with motion detection and Nextcloud WebDAV upload. Runs on a Raspberry Pi 3+ with IR camera, triggered every 15 seconds via cron. Images are stored on a RAM disk (`/mnt/ramdisk`) to avoid SD card wear.
+Raspberry Pi bird camera (`meisencam`) with motion detection and Nextcloud WebDAV upload. Runs on a Raspberry Pi 3+ with
+IR camera, triggered every x seconds via cron. Images are stored on a RAM disk (`/mnt/ramdisk`) to avoid SD card wear.
 
 ## Commands
 
@@ -25,13 +26,17 @@ pytest tests/test_upload.py
 
 ## Architecture
 
-The project follows a single-cycle design — each invocation captures one image, checks for motion, and uploads if motion is detected. Cron handles scheduling (every 15 seconds).
+The project follows a single-cycle design — each invocation captures one image, checks for motion, and uploads if motion
+is detected. Cron handles scheduling (every 15 seconds).
 
 **Modules (`src/meisencam/`):**
 
-- **`__main__.py`** — Entry point. Orchestrates: capture → motion detect → upload → log. Constants: `RAMDISK=/mnt/ramdisk`, `THRESHOLD=3.0`
-- **`camera.py`** — `MeisenCamera` class wrapping `picamera2`. Resolution 640x480 with tuned exposure/gain/color settings for IR camera
-- **`motion.py`** — `detect_motion()` compares current vs previous image as 4x3 grayscale thumbnails. Returns score 0-255; above threshold triggers upload
+- **`__main__.py`** — Entry point. Orchestrates: capture → motion detect → upload → log. Constants:
+  `RAMDISK=/mnt/ramdisk`, `THRESHOLD=3.0`
+- **`camera.py`** — `MeisenCamera` class wrapping `picamera2`. Resolution 640x480 with tuned exposure/gain/color
+  settings for IR camera
+- **`motion.py`** — `detect_motion()` compares current vs previous image as 4x3 grayscale thumbnails. Returns score
+  0-255; above threshold triggers upload
 - **`upload.py`** — `upload_image()` sends image via WebDAV PUT to Nextcloud public share. Skips upload when `mode < 1`
 
 ## Runtime Environment
@@ -39,7 +44,8 @@ The project follows a single-cycle design — each invocation captures one image
 - **Target:** Raspberry Pi 3+ with Raspbian Light, Camera V2.1 (IR)
 - **Python:** 3.11
 - **RAM disk:** `tmpfs /mnt/ramdisk tmpfs nodev,nosuid,size=64M 0 0` in `/etc/fstab`
-- **`picamera2`** is Linux-only — tests mock it; development on macOS uses `uv sync` which skips the platform-specific dependency
+- **`picamera2`** is Linux-only — tests mock it; development on macOS uses `uv sync` which skips the platform-specific
+  dependency
 
 ## Key Dependencies
 
