@@ -8,9 +8,9 @@ from pathlib import Path
 
 from picamera2 import Picamera2
 
-logger = logging.getLogger(__name__)
+from meisencam import config
 
-IR_LED_GPIO = 21
+logger = logging.getLogger(__name__)
 
 
 class MeisenCamera:
@@ -18,14 +18,14 @@ class MeisenCamera:
 
     def __init__(
         self,
-        width: int = 640,
-        height: int = 480,
-        exposure_time: int = 200000,
-        analogue_gain: float = 8.0,
-        brightness: float = 0.3,
-        contrast: float = 1.4,
-        saturation: float = 0.2,
-        sharpness: float = 1.3,
+        width: int = config.CAMERA_WIDTH,
+        height: int = config.CAMERA_HEIGHT,
+        exposure_time: int = config.CAMERA_EXPOSURE_TIME,
+        analogue_gain: float = config.CAMERA_ANALOGUE_GAIN,
+        brightness: float = config.CAMERA_BRIGHTNESS,
+        contrast: float = config.CAMERA_CONTRAST,
+        saturation: float = config.CAMERA_SATURATION,
+        sharpness: float = config.CAMERA_SHARPNESS,
     ):
         self.width = width
         self.height = height
@@ -42,10 +42,10 @@ class MeisenCamera:
         logger.info("Camera configured (%dx%d)", self.width, self.height)
 
     def _configure(self) -> None:
-        config = self._camera.create_still_configuration(
+        conf = self._camera.create_still_configuration(
             main={"size": (self.width, self.height)}
         )
-        self._camera.configure(config)
+        self._camera.configure(conf)
         self._camera.set_controls(
             {
                 "AeEnable": False,
@@ -64,7 +64,7 @@ class MeisenCamera:
     def _set_ir_led(on: bool) -> None:
         state = "dh" if on else "dl"
         subprocess.run(
-            ["pinctrl", "set", str(IR_LED_GPIO), "op", state],
+            ["pinctrl", "set", str(config.IR_LED_GPIO), "op", state],
             check=False,
         )
         logger.info("IR LED %s", "on" if on else "off")

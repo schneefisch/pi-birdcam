@@ -4,6 +4,7 @@ import argparse
 import logging
 from pathlib import Path
 
+from meisencam import config
 from meisencam.camera import MeisenCamera
 from meisencam.motion import detect_motion
 from meisencam.upload import upload_image
@@ -12,8 +13,6 @@ RAMDISK = Path("/mnt/ramdisk")
 CURRENT_IMAGE = RAMDISK / "meisencam.jpg"
 OLD_IMAGE = RAMDISK / "meisencamalt.jpg"
 LOG_FILE = RAMDISK / "meisencam.log"
-
-THRESHOLD = 3.0
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -44,7 +43,7 @@ def main(argv: list[str] | None = None) -> None:
 
     logging.info("Detecting motion")
     score = detect_motion(CURRENT_IMAGE, OLD_IMAGE)
-    mode = 1 if score > THRESHOLD else 0
+    mode = 1 if score > config.MOTION_THRESHOLD else 0
 
     logging.info("Timestamp: %s  Score: %.2f  Mode: %d", timestamp, score, mode)
 
