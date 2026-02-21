@@ -32,11 +32,12 @@ is detected. Cron handles scheduling (every 15 seconds).
 **Modules (`src/meisencam/`):**
 
 - **`__main__.py`** — Entry point. Orchestrates: capture → motion detect → upload → log. Constants:
-  `RAMDISK=/mnt/ramdisk`, `THRESHOLD=3.0`
-- **`camera.py`** — `MeisenCamera` class wrapping `picamera2`. Resolution 640x480 with tuned exposure/gain/color
+  `RAMDISK=/mnt/ramdisk`
+- **`config.py`** — Centralised configuration loaded from environment / `.env` file. Camera, motion, and upload settings.
+- **`camera.py`** — `MeisenCamera` class wrapping `picamera2`. Resolution 1920x1080 with tuned exposure/gain/color
   settings for IR camera
-- **`motion.py`** — `detect_motion()` compares current vs previous image as 4x3 grayscale thumbnails. Returns score
-  0-255; above threshold triggers upload
+- **`motion.py`** — `detect_motion()` uses per-pixel thresholding on a 64x48 grayscale grid with Gaussian blur. Returns
+  percentage of changed pixels (0-100); above threshold triggers upload. Reference image only updated on motion or max age.
 - **`upload.py`** — `upload_image()` sends image via WebDAV PUT to Nextcloud public share. Skips upload when `mode < 1`
 
 ## Runtime Environment
