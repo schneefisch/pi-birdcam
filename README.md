@@ -31,22 +31,29 @@ edit the fstab and insert following contents
 tmpfs /mnt/ramdisk tmpfs nodev,nosuid,size=64M 0 0
 ```
 
-4. install picam
+4. Install dependencies
 
 ```sh
-# setup virtual environment
-python3 -m venv my-venv
-# install python picamera
+# install picamera2 system package
 sudo apt install -y python3-picamera2 python3-libcamera
+
+# install project dependencies
+uv sync
 ```
 
-5. test the camera by executing 
+5. Test the camera by taking a single picture
 
 ```sh
-./testcam.py
+python -m meisencam --test
 ```
 
-download the picture and check if it's working
+This captures one image to `/mnt/ramdisk/meisencam.jpg` and exits. You can specify a custom output path:
+
+```sh
+python -m meisencam --test --output /tmp/test.jpg
+```
+
+Download the picture and check if it's working.
 
 ## Upload
 instead of a custom server I'm using a drop-file directory in Nextcloud.
@@ -60,10 +67,10 @@ to run that automatically and repeatedly edit the crontabs
 
 ```sh
 # Alle 15 Sekunden ein Bild aufnehmen und hochladen
-* * * * * sleep 0; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
-* * * * * sleep 15; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
-* * * * * sleep 30; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
-* * * * * sleep 45; /home/froeser/pi-birdcam/meisencam.py >/dev/null 2>&1
+* * * * * sleep 0; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
+* * * * * sleep 15; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
+* * * * * sleep 30; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
+* * * * * sleep 45; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
 ```
 
 and since the raspberry pi sometimes needs a restart, add this:
