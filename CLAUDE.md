@@ -43,6 +43,7 @@ is detected. Cron handles scheduling (every 15 seconds).
 ## Runtime Environment
 
 - **Target:** Raspberry Pi 3+ with Raspbian Light, Camera V2.1 (IR)
+- **SSH:** `ssh froeser@192.168.178.40` — project at `~/pi-birdcam`, `uv` at `~/.local/bin/uv`
 - **Python:** 3.11
 - **RAM disk:** `tmpfs /mnt/ramdisk tmpfs nodev,nosuid,size=64M 0 0` in `/etc/fstab`
 - **`picamera2`** is Linux-only — tests mock it; development on macOS uses `uv sync` which skips the platform-specific
