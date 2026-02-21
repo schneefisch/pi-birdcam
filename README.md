@@ -44,14 +44,16 @@ uv sync
 5. Test the camera by taking a single picture
 
 ```sh
-python -m meisencam --test
+uv run python -m meisencam --test
 ```
 
 This captures one image to `/mnt/ramdisk/meisencam.jpg` and exits. You can specify a custom output path:
 
 ```sh
-python -m meisencam --test --output /tmp/test.jpg
+uv run python -m meisencam --test --output /tmp/test.jpg
 ```
+
+> **Note:** Always use `uv run` to execute commands so that the virtual environment is used automatically. Alternatively, activate the venv first with `source .venv/bin/activate`.
 
 Download the picture and check if it's working.
 
@@ -67,10 +69,10 @@ to run that automatically and repeatedly edit the crontabs
 
 ```sh
 # Alle 15 Sekunden ein Bild aufnehmen und hochladen
-* * * * * sleep 0; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
-* * * * * sleep 15; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
-* * * * * sleep 30; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
-* * * * * sleep 45; cd /home/froeser/pi-birdcam && python -m meisencam >/dev/null 2>&1
+* * * * * sleep 0; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
+* * * * * sleep 15; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
+* * * * * sleep 30; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
+* * * * * sleep 45; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
 ```
 
 and since the raspberry pi sometimes needs a restart, add this:
