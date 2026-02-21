@@ -1,6 +1,7 @@
 """Camera control module wrapping Picamera2."""
 
 import logging
+import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
@@ -8,6 +9,8 @@ from pathlib import Path
 from picamera2 import Picamera2
 
 logger = logging.getLogger(__name__)
+
+IR_LED_GPIO = 21
 
 
 class MeisenCamera:
@@ -57,11 +60,21 @@ class MeisenCamera:
             }
         )
 
+    @staticmethod
+    def _set_ir_led(on: bool) -> None:
+        state = "dh" if on else "dl"
+        subprocess.run(
+            ["pinctrl", "set", str(IR_LED_GPIO), "op", state],
+            check=False,
+        )
+        logger.info("IR LED %s", "on" if on else "off")
+
     def capture(self, output_path: Path) -> str:
         """Capture a still image.
 
         Returns the timestamp string for the capture.
         """
+        self._set_ir_led(True)
         self._camera.start()
         time.sleep(2)  # sensor stabilisation
 
@@ -69,5 +82,6 @@ class MeisenCamera:
         self._camera.capture_file(str(output_path))
 
         self._camera.stop()
+        self._set_ir_led(False)
         logger.info("Captured image: %s", output_path)
         return timestamp
