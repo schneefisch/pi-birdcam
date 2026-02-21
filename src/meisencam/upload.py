@@ -1,6 +1,7 @@
 """WebDAV upload to Nextcloud public share."""
 
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -8,8 +9,30 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-WEBDAV_BASE = "https://pro.woelkli.com/public.php/webdav"
-SHARE_TOKEN = "Gi2bRAHrgMoebcA"
+ENV_FILE = Path("/mnt/ramdisk/.env")
+
+
+def _load_env_file(path: Path = ENV_FILE) -> None:
+    """Load key=value pairs from an env file into os.environ."""
+    if not path.is_file():
+        return
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            key, _, value = line.partition("=")
+            if key and value:
+                os.environ.setdefault(key.strip(), value.strip())
+
+
+_load_env_file()
+
+WEBDAV_BASE = os.environ.get(
+    "MEISENCAM_WEBDAV_BASE",
+    "https://nc-6283277816195226543.nextcloud-ionos.com/public.php/webdav",
+)
+SHARE_TOKEN = os.environ.get("MEISENCAM_SHARE_TOKEN", "")
 
 
 def upload_image(
@@ -42,7 +65,7 @@ def upload_image(
     try:
         with open(image_path, "rb") as img:
             response = requests.put(
-                url, data=img, auth=(share_token, ""), verify=False
+                url, data=img, auth=(share_token, "")
             )
         logger.info("Upload response: %d", response.status_code)
         return response
