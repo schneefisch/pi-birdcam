@@ -72,7 +72,7 @@ class MeisenCamera:
         """
         self._set_ir_led(True)
         self._camera.start()
-        time.sleep(2)  # sensor stabilisation
+        time.sleep(5)  # sensor stabilisation
 
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         self._camera.capture_file(str(output_path))
