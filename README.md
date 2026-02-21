@@ -71,11 +71,8 @@ to run that automatically and repeatedly edit the crontabs
 `crontab -e`
 
 ```sh
-# Alle 15 Sekunden ein Bild aufnehmen und hochladen
-* * * * * sleep 0; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
-* * * * * sleep 15; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
-* * * * * sleep 30; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
-* * * * * sleep 45; cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
+# Alle 2 Minuten ein Bild aufnehmen und hochladen
+*/2 * * * * cd /home/froeser/pi-birdcam && uv run python -m meisencam >/dev/null 2>&1
 ```
 
 and since the raspberry pi sometimes needs a restart, add this:

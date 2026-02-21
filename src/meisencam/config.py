@@ -32,8 +32,8 @@ def _float(key: str, default: float) -> float:
 
 
 # -- Camera ------------------------------------------------------------------
-CAMERA_WIDTH = _int("MEISENCAM_WIDTH", 640)
-CAMERA_HEIGHT = _int("MEISENCAM_HEIGHT", 480)
+CAMERA_WIDTH = _int("MEISENCAM_WIDTH", 1920)
+CAMERA_HEIGHT = _int("MEISENCAM_HEIGHT", 1080)
 CAMERA_EXPOSURE_TIME = _int("MEISENCAM_EXPOSURE_TIME", 250000)
 CAMERA_ANALOGUE_GAIN = _float("MEISENCAM_ANALOGUE_GAIN", 10.0)
 CAMERA_BRIGHTNESS = _float("MEISENCAM_BRIGHTNESS", 0.4)
