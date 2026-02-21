@@ -26,9 +26,16 @@ packages = ["src/meisencam"]
 
 [tool.uv]
 # picamera2 depends on python-prctl which can only be built on Linux.
-# Split environments so uv never tries to build linux-only sdists on macOS.
-environments = ["sys_platform == 'linux'", "sys_platform != 'linux'"]
+# pyqt5 (transitive dep of picamera2) has no aarch64 wheels.
+# Split environments so uv resolves per-platform and skips incompatible packages.
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'linux' and platform_machine == 'aarch64'",
+    "sys_platform != 'linux'",
+]
 no-build-package = ["python-prctl"]
+# pyqt5 has no aarch64 wheels; exclude it — not needed for headless Pi usage
+exclude-dependencies = ["pyqt5", "pyqt5-qt5", "pyqt5-sip"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
